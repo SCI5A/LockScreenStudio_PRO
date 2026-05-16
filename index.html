@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#000000" />
+  <title>LockScreenStudio PRO</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ========== GRAIN OVERLAY ========== -->
+  <canvas id="grainCanvas" class="grain-overlay" aria-hidden="true"></canvas>
+
+  <!-- ========== APP SHELL ========== -->
+  <div class="app-shell">
+
+    <!-- ========== SIDEBAR PANEL ========== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+
+        <!-- Logo -->
+        <div class="sidebar-logo">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect x="5" y="2" width="14" height="20" rx="3" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="12" cy="17" r="1.2" fill="currentColor"/>
+              <rect x="9" y="4.5" width="6" height="1" rx=".5" fill="currentColor" opacity=".5"/>
+            </svg>
+          </div>
+          <span class="logo-text">LockScreen<strong>Studio</strong></span>
+          <span class="logo-badge">PRO</span>
+        </div>
+
+        <!-- Theme Toggle -->
+        <div class="theme-toggle-wrap">
+          <button class="theme-btn" id="themeToggle" title="Toggle theme">
+            <span class="theme-icon sun">☀</span>
+            <span class="theme-icon moon">◑</span>
+          </button>
+        </div>
+
+        <!-- Sections -->
+        <div class="panel-sections">
+
+          <!-- Background Section -->
+          <div class="panel-section">
+            <div class="section-header">
+              <span class="section-icon">🖼</span>
+              <span class="section-title">Background</span>
+            </div>
+            <div class="section-body">
+              <div class="upload-zone" id="bgUploadZone">
+                <input type="file" id="bgFile" accept="image/*,video/*" hidden />
+                <div class="upload-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <p class="upload-label">Drop image or video</p>
+                <p class="upload-sub">JPG, PNG, MP4, MOV</p>
+              </div>
+              <div class="bg-controls">
+                <label class="ctrl-label">Blur Intensity</label>
+                <input type="range" id="bgBlur" min="0" max="30" value="0" class="slider" />
+                <label class="ctrl-label">Brightness</label>
+                <input type="range" id="bgBrightness" min="20" max="150" value="100" class="slider" />
+                <label class="ctrl-label">Cinematic Zoom</label>
+                <div class="toggle-row">
+                  <input type="checkbox" id="cinematicZoom" class="toggle-check" checked />
+                  <label for="cinematicZoom" class="toggle-label"></label>
+                  <span class="toggle-text">Enabled</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clock & Date Section -->
+          <div class="panel-section">
+            <div class="section-header">
+              <span class="section-icon">🕐</span>
+              <span class="section-title">Clock & Date</span>
+            </div>
+            <div class="section-body">
+              <label class="ctrl-label">Time Display</label>
+              <input type="time" id="clockInput" class="text-input" value="09:41" />
+              <label class="ctrl-label">Date Display</label>
+              <input type="text" id="dateInput" class="text-input" value="Saturday, September 12" />
+              <label class="ctrl-label">Clock Style</label>
+              <select id="clockStyle" class="select-input">
+                <option value="large">Large — iOS Default</option>
+                <option value="medium">Medium — Compact</option>
+                <option value="analog">Analog — Classic</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Notification Section -->
+          <div class="panel-section">
+            <div class="section-header">
+              <span class="section-icon">🔔</span>
+              <span class="section-title">Notification</span>
+            </div>
+            <div class="section-body">
+              <label class="ctrl-label">App Name</label>
+              <input type="text" id="notifApp" class="text-input" value="Messages" placeholder="App name" />
+              <label class="ctrl-label">Title</label>
+              <input type="text" id="notifTitle" class="text-input" value="John Appleseed" placeholder="Notification title" />
+              <label class="ctrl-label">Message</label>
+              <textarea id="notifMsg" class="text-input textarea" rows="3" placeholder="Notification message...">Hey! Are you coming tonight? 🎉</textarea>
+              <label class="ctrl-label">App Icon</label>
+              <div class="upload-zone mini" id="iconUploadZone">
+                <input type="file" id="iconFile" accept="image/*" hidden />
+                <span>Upload App Icon</span>
+              </div>
+              <label class="ctrl-label">Delay (seconds)</label>
+              <input type="range" id="notifDelay" min="0" max="5" step="0.5" value="1.5" class="slider" />
+              <span class="slider-val" id="notifDelayVal">1.5s</span>
+            </div>
+          </div>
+
+          <!-- Audio Section -->
+          <div class="panel-section">
+            <div class="section-header">
+              <span class="section-icon">🎵</span>
+              <span class="section-title">Audio</span>
+            </div>
+            <div class="section-body">
+              <label class="ctrl-label">Background Music</label>
+              <div class="upload-zone mini" id="musicUploadZone">
+                <input type="file" id="musicFile" accept="audio/*" hidden />
+                <span>Upload Music</span>
+              </div>
+              <label class="ctrl-label">Notification Sound</label>
+              <div class="upload-zone mini" id="soundUploadZone">
+                <input type="file" id="soundFile" accept="audio/*" hidden />
+                <span>Upload Sound</span>
+              </div>
+              <label class="ctrl-label">Music Volume</label>
+              <input type="range" id="musicVol" min="0" max="100" value="60" class="slider" />
+              <label class="ctrl-label">Sound Volume</label>
+              <input type="range" id="soundVol" min="0" max="100" value="90" class="slider" />
+            </div>
+          </div>
+
+          <!-- Extra Text Section -->
+          <div class="panel-section">
+            <div class="section-header">
+              <span class="section-icon">✦</span>
+              <span class="section-title">Extra Text</span>
+            </div>
+            <div class="section-body">
+              <label class="ctrl-label">Status Text</label>
+              <input type="text" id="statusText" class="text-input" value="Do Not Disturb" />
+              <label class="ctrl-label">Custom Label</label>
+              <input type="text" id="customLabel" class="text-input" placeholder="Optional label..." />
+            </div>
+          </div>
+
+        </div><!-- /panel-sections -->
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="btn-primary" id="replayBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Replay Scene
+          </button>
+          <button class="btn-secondary" id="fullscreenBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Fullscreen
+          </button>
+        </div>
+
+      </div><!-- /sidebar-inner -->
+    </aside>
+
+    <!-- ========== MAIN PREVIEW AREA ========== -->
+    <main class="preview-area">
+
+      <!-- Mobile Toggle for Sidebar -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle controls">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Phone Frame -->
+      <div class="phone-wrapper">
+        <div class="phone-frame" id="phoneFrame">
+
+          <!-- Phone Notch -->
+          <div class="phone-notch">
+            <div class="notch-inner">
+              <div class="notch-camera"></div>
+            </div>
+          </div>
+
+          <!-- Phone Screen -->
+          <div class="phone-screen" id="phoneScreen">
+
+            <!-- Background Layer -->
+            <div class="bg-layer" id="bgLayer">
+              <div class="bg-media-wrap" id="bgMediaWrap">
+                <!-- media injected by JS -->
+                <div class="bg-default-gradient"></div>
+              </div>
+              <div class="bg-overlay"></div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+              <span class="status-time" id="statusTime">9:41</span>
+              <div class="status-icons">
+                <svg class="status-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                  <path d="M1.5 8.5C4.5 5.5 8 4 12 4s7.5 1.5 10.5 4.5L21 11c-2.5-2.5-5.5-4-9-4s-6.5 1.5-9 4L1.5 8.5z"/>
+                  <path d="M5 12c1.9-1.9 4.3-3 7-3s5.1 1.1 7 3l-1.5 1.5C15.9 14 14 13 12 13s-3.9 1-5.5 2.5L5 12z"/>
+                  <circle cx="12" cy="17" r="2"/>
+                </svg>
+                <svg class="status-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                  <rect x="1" y="6" width="15" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <rect x="3" y="8" width="9" height="8" rx="1" fill="currentColor"/>
+                  <path d="M17 10v4a2 2 0 000-4z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Clock Block -->
+            <div class="clock-block" id="clockBlock">
+              <div class="clock-time" id="clockDisplay">9:41</div>
+              <div class="clock-date" id="dateDisplay">Saturday, September 12</div>
+              <!-- Analog clock (hidden by default) -->
+              <canvas class="analog-clock" id="analogClock" width="120" height="120" style="display:none;"></canvas>
+            </div>
+
+            <!-- Status Text -->
+            <div class="lockscreen-status" id="lockscreenStatus">
+              <span class="status-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9v1H3v12h18V10h-2V9c0-3.87-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5v1H7V9c0-2.76 2.24-5 5-5z"/>
+                </svg>
+                Do Not Disturb
+              </span>
+            </div>
+
+            <!-- Notification Card -->
+            <div class="notif-card" id="notifCard">
+              <div class="notif-blur-bg"></div>
+              <div class="notif-content">
+                <div class="notif-header">
+                  <div class="notif-app-icon" id="notifAppIcon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                  </div>
+                  <span class="notif-app-name" id="notifAppName">Messages</span>
+                  <span class="notif-time">now</span>
+                </div>
+                <div class="notif-body">
+                  <p class="notif-title-text" id="notifTitleDisplay">John Appleseed</p>
+                  <p class="notif-msg-text" id="notifMsgDisplay">Hey! Are you coming tonight? 🎉</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Custom Label -->
+            <div class="custom-label-wrap" id="customLabelWrap" style="display:none;">
+              <span class="custom-label-text" id="customLabelDisplay"></span>
+            </div>
+
+            <!-- Bottom Controls -->
+            <div class="lockscreen-bottom">
+              <div class="bottom-btn" title="Flashlight">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M8 2h8l2 8H6L8 2z"/>
+                  <path d="M6 10l2 12h8l2-12"/>
+                  <line x1="12" y1="14" x2="12" y2="18"/>
+                </svg>
+              </div>
+              <div class="home-indicator"></div>
+              <div class="bottom-btn" title="Camera">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+              </div>
+            </div>
+
+          </div><!-- /phone-screen -->
+
+          <!-- Phone Buttons -->
+          <div class="phone-btn-side left">
+            <div class="phone-btn"></div>
+            <div class="phone-btn"></div>
+            <div class="phone-btn"></div>
+          </div>
+          <div class="phone-btn-side right">
+            <div class="phone-btn tall"></div>
+          </div>
+
+        </div><!-- /phone-frame -->
+      </div><!-- /phone-wrapper -->
+
+      <!-- Preview Label -->
+      <div class="preview-label">
+        <span>Live Preview</span>
+        <span class="preview-dot"></span>
+      </div>
+
+    </main><!-- /preview-area -->
+
+  </div><!-- /app-shell -->
+
+  <!-- ========== FULLSCREEN OVERLAY ========== -->
+  <div class="fullscreen-overlay" id="fullscreenOverlay">
+    <div class="fs-bg" id="fsBg"></div>
+    <div class="fs-screen" id="fsScreen">
+      <!-- cloned content injected by JS -->
+    </div>
+    <button class="fs-close" id="fsClose">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button class="fs-replay" id="fsReplay">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Hidden Audio Elements -->
+  <audio id="musicAudio" loop></audio>
+  <audio id="soundAudio"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
